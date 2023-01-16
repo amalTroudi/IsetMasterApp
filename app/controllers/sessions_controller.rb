@@ -3,10 +3,13 @@ class SessionsController < ApplicationController
     @user = User
            .find_by(email: params['email'])
            .try(:authenticate, params['password'])
+          
     if @user
       session[:user_id] = @user.id
+      token = JsonWebToken.encode(user_id: @user.id)
+        time = Time.now + 24.hours.to_i
       render json:
-       {
+       {token: token, exp: time.strftime("%m-%d-%Y %H:%M"),
          status: :created,
          logged_in: true,
          user: @user
@@ -33,4 +36,7 @@ class SessionsController < ApplicationController
     reset_session
     render json: { status: 200, logged_out: true }
   end
+
+
+
 end
