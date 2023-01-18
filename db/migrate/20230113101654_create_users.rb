@@ -8,6 +8,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.integer :role 
       t.integer :balance, default: 20
       t.timestamps 
+     
     end
   end
 end

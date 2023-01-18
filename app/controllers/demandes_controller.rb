@@ -6,7 +6,17 @@ class DemandesController < ApplicationController
     
       def create
         @demande = Demande.new(post_params)
+        
+        nbr_jours = (@demande.end_date.to_date - @demande.start_date.to_date)+1
+        @demande.update(:nbr_jours => nbr_jours ) 
       
+if  post_params[:start_date].to_date > post_params[:end_date].to_date
+@demande.update(:end_date => post_params[:start_date].to_date)
+@demande.update(:start_date => post_params[:end_date].to_date)
+end
+
+
+
         if @demande.save
           render json: @demande
         
@@ -14,8 +24,10 @@ class DemandesController < ApplicationController
         else
           render json: @demande.errors
         end
-        
+   
+     
       end
+
     
       def show
         @demande = Demande.find(params[:id])
@@ -24,10 +36,28 @@ class DemandesController < ApplicationController
     
       def update
         @demande = Demande.find(params[:id])
-    
-        if @demande.update(post_params)
-          render json: @demande
-    
+        @motif = Motif.where("id = ?" ,  @demande.motif_id ) 
+        @user = User.where("id = ?" ,  @demande.employe_id ) 
+      
+        if post_params[:status] == 0 || post_params[:status] == 2
+          @demande.update(post_params)
+            render json: {
+            demande:@demande,
+            motif: @motif,
+            user: @user}
+
+        elsif post_params[:status] == 1
+      
+          demande_days = (@demande.nbr_jours).to_f
+          balance_days = @user.pluck(:balance).join(',').to_f       
+          result = (balance_days-demande_days).to_f    
+          @demande.update(post_params) 
+          @user.update_all(:balance => result)
+         
+          render json: {
+            demande: @demande,
+            motif: @motif,
+            user: @user}
         else
           render json: @demande.errors, statut: :unprocessable_entity
         end
@@ -42,7 +72,7 @@ class DemandesController < ApplicationController
     
       def post_params
         
-        params.permit(:start_date, :end_date, :commentaire, :employe_id, :motif_id, :status)
+        params.permit(:start_date, :end_date, :commentaire, :employe_id, :motif_id, :status , :nbr_jours)
       end
     
       def set_post
