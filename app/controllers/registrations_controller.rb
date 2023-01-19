@@ -1,22 +1,35 @@
 class RegistrationsController < ApplicationController
-  before_action :authorize_request
-  default :from => "amine@gmail.com"
+
+  def confirm_email
+    user = User.find_by_confirm_token(params[:id])
+    if user
+      user.email_confirmed = true
+      user.confirm_token = nil
+      user.save
+      redirect_to 'http://localhost:4200/'
+    else
+    
+      render json: { status: 500 }
+
+    end
+
+  end
+
+
+
+
+
+
   def create
-    user = User.create!(
-      
-      email: params[:email],
+    user = User.create!(email: params[:email],
   
       password: params[:password],
       password_confirmation: params[:password_confirmation],
-      role: params[:role].to_i,
-      User.registration_confirmation(@user).deliver
-    )
-   
-
-
-    
-
-    if user
+      role: params[:role].to_i)  
+      
+      if user 
+        UserMailer.registration_confirmation(user).deliver
+        session[:user_id] = user.id 
       render json: {
         status: :created,
         user: user
@@ -31,18 +44,8 @@ class RegistrationsController < ApplicationController
   end
 
 
-  @user = User.new(user_params)    
-  if @user.save
-    UserMailer.registration_confirmation(@user).deliver
-  end
-
-  
-if user
-  user.email_activate
-end
-
 
 
 
 end
-end
+

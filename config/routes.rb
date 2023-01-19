@@ -9,4 +9,9 @@ Rails.application.routes.draw do
   resources :demandes, only: %i[index show create update destroy ]
   delete :logout, to: 'sessions#logout'
   get :logged_in, to: 'sessions#logged_in'
+  resources :registrations do
+    member do
+      get :confirm_email
+    end
+  end
 end
