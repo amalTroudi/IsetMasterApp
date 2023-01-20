@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
          status: :created,
          logged_in: true,
          user: @user
-       }
+       },methods: [:user_image_url]
     else
       render json: { status: :not_found }
     end
