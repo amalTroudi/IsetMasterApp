@@ -30,6 +30,7 @@ end
 
     
       def show
+        
         @demande = Demande.find(params[:id])
         render json: @demande
       end
@@ -62,6 +63,39 @@ end
           render json: @demande.errors, statut: :unprocessable_entity
         end
       end
+
+
+    def static_admin
+   @acepted=Demande.where(status: 1).count()
+   @encours= Demande.where(status: 0).count()
+   @refused= Demande.where(status: 2).count()
+
+  
+   render json:{
+    
+    acepted: @acepted,
+    encours: @encours,
+    refused: @refused
+  }
+    end
+    
+    def static_employee
+
+    @acepted=Demande.where(status: 1).where(employe_id:(params[:employe_id])).count()
+    @encours= Demande.where(status: 0).where(employe_id:(params[:employe_id])).count()
+    @refused= Demande.where(status: 2).where(employe_id:(params[:employe_id])).count()
+ 
+   
+    render json:{
+     
+     acepted: @acepted,
+     encours: @encours,
+     refused: @refused
+   }
+
+
+
+    end
     
       def destroy
         @demande = Demande.find(params[:id])

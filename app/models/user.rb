@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_secure_password
   validates_presence_of :email
   validates_uniqueness_of :email
+  has_one_attached :avatar, dependent: :destro
   enum role: %i[employee admin]
 
 
@@ -12,12 +13,15 @@ class User < ApplicationRecord
   end
 
 
+  def user_image_url
+    avatar.attached? ? url_for(avatar) : nil
+  end
+
 
   def email_activate
     self.email_confirmed = true
     self.confirm_token = nil
   end
-
 
 
   
