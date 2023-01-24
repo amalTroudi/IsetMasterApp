@@ -6,6 +6,10 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 puts "Seeding..."
-User.create!(email: 'webmaster@gmail.com',password:"123456", role:1)
-User.create!(email: 'employee@gmail.com', password:"123456", role:0)
+webmaster = User.create!(email: 'webmaster@gmail.com', password:"123456", role:1, email_confirmed: true)
+webmaster.update_attribute(:confirm_token, nil)
+
+employee = User.create!(email: 'employee@gmail.com',
+             password:"123456", role:0, email_confirmed: true)
+             employee.update_attribute(:confirm_token, nil)
 puts "Seeding done."

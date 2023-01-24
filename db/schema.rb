@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 2023_01_19_085125) do
     t.integer "balance", default: 20
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "email_confirmed"
+    t.boolean "email_confirmed", default: false
     t.string "confirm_token"
   end
 
