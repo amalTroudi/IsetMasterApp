@@ -24,6 +24,8 @@ class RegistrationsController < ApplicationController
     user = User.create!(email: params[:email],
   
       password: params[:password],
+      nom: params[:nom],
+      prenom: params[:prenom],
       password_confirmation: params[:password_confirmation],
       role: params[:role].to_i)  
       

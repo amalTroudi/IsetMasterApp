@@ -6,6 +6,7 @@ class User < ApplicationRecord
   validates_uniqueness_of :email
   has_one_attached :avatar, dependent: :destro
   enum role: %i[employee admin]
+  
 
 
   def confirmation_token

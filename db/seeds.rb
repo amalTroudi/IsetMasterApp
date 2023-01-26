@@ -9,7 +9,7 @@ puts "Seeding..."
 webmaster = User.create!(email: 'webmaster@gmail.com', password:"123456", role:1, email_confirmed: true)
 webmaster.update_attribute(:confirm_token, nil)
 
-employee = User.create!(email: 'employee@gmail.com',
+employee = User.create!(nom:'amine',prenom:'trimech',email: 'employee@gmail.com',
              password:"123456", role:0, email_confirmed: true)
              employee.update_attribute(:confirm_token, nil)
 puts "Seeding done."

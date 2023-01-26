@@ -1,12 +1,12 @@
 class DemandesController < ApplicationController
 
     def index
-        render json: Demande.all
+      render json: Demande.all, include: [:employe, :motif]  
       end
     
       def create
         @demande = Demande.new(post_params)
-        
+     
         nbr_jours = (@demande.end_date.to_date - @demande.start_date.to_date)+1
         @demande.update(:nbr_jours => nbr_jours ) 
       
@@ -66,6 +66,7 @@ end
 
 
     def static_admin
+      @all=Demande.all.count
     @users = User.all.where("role =?", 1 ).count
    @acepted=Demande.where(status: 1).count()
    @encours= Demande.where(status: 0).count()
@@ -73,6 +74,7 @@ end
 
   
    render json:{
+    all: @all,
     users: @users,
     acepted: @acepted,
     encours: @encours,
