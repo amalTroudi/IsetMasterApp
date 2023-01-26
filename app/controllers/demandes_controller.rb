@@ -66,13 +66,14 @@ end
 
 
     def static_admin
+    @users = User.all.where("role =?", 1 ).count
    @acepted=Demande.where(status: 1).count()
    @encours= Demande.where(status: 0).count()
    @refused= Demande.where(status: 2).count()
 
   
    render json:{
-    
+    users: @users,
     acepted: @acepted,
     encours: @encours,
     refused: @refused
