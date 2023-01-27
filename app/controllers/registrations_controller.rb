@@ -21,13 +21,14 @@ class RegistrationsController < ApplicationController
 
 
   def create
-    user = User.create!(email: params[:email],
+    byebug
+    user = User.create!(email: params['user'][:email],
   
-      password: params[:password],
-      nom: params[:nom],
-      prenom: params[:prenom],
-      password_confirmation: params[:password_confirmation],
-      role: params[:role].to_i)  
+      password: params['user'][:password],
+      nom: params['user'][:nom],
+      prenom: params['user'][:prenom],
+      password_confirmation: params['user'][:password_confirmation],
+      role: params['user'][:role].to_i)  
       
       if user 
         UserMailer.registration_confirmation(user).deliver
