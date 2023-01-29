@@ -24,7 +24,7 @@ end
         else
           render json: @demande.errors
         end
-   
+        
      
       end
 
@@ -82,6 +82,20 @@ end
   }
     end
     
+
+def demandeid
+
+@demandeid=Demande.where(employe_id:(params[:employe_id]))
+
+render json: {
+  demandeid: @demandeid
+}
+
+end
+
+
+
+
     def static_employee
 
     @acepted=Demande.where(status: 1).where(employe_id:(params[:employe_id])).count()
