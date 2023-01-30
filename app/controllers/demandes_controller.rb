@@ -10,10 +10,10 @@ class DemandesController < ApplicationController
         nbr_jours = (@demande.end_date.to_date - @demande.start_date.to_date)+1
         @demande.update(:nbr_jours => nbr_jours ) 
       
-if  post_params[:start_date].to_date > post_params[:end_date].to_date
-@demande.update(:end_date => post_params[:start_date].to_date)
-@demande.update(:start_date => post_params[:end_date].to_date)
-end
+        if  post_params[:start_date].to_date > post_params[:end_date].to_date
+        @demande.update(:end_date => post_params[:start_date].to_date)
+        @demande.update(:start_date => post_params[:end_date].to_date)
+        end
 
 
 
@@ -67,7 +67,7 @@ end
 
     def static_admin
       @all=Demande.all.count
-    @users = User.all.where("role =?", 1 ).count
+    @users = User.all.where("role =?", 0).count
    @acepted=Demande.where(status: 1).count()
    @encours= Demande.where(status: 0).count()
    @refused= Demande.where(status: 2).count()
@@ -84,12 +84,15 @@ end
     
 
 def demandeid
-
-@demandeid=Demande.where(employe_id:(params[:employe_id]))
+  
+@demandes=Demande.where(employe_id:(params[:employe_id]).to_i)
+  
+@nbemploye=Demande.where(employe_id:(params[:employe_id])).count()  
 
 render json: {
-  demandeid: @demandeid
-}
+  demandeid: @demandes,
+  nbemploye: @nbemploye
+}, include: [:employe, :motif]  
 
 end
 
