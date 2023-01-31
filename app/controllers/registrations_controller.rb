@@ -22,10 +22,11 @@ class RegistrationsController < ApplicationController
 
   def create
     user = User.create!(email: params['user'][:email],
-  
+   cin: params['user'][:cin],
       password: params['user'][:password],
       nom: params['user'][:nom],
       prenom: params['user'][:prenom],
+      datenaissance: params['user'][:datenaissance],
       password_confirmation: params['user'][:password_confirmation],
       role: params['user'][:role].to_i)  
       
