@@ -34,18 +34,18 @@ class DemandesController < ApplicationController
         @demande = Demande.find(params[:id])
         render json: @demande
       end
-    
+  
       def update
         @demande = Demande.find(params[:id])
         @motif = Motif.where("id = ?" ,  @demande.motif_id ) 
         @user = User.where("id = ?" ,  @demande.employe_id ) 
-      
+       
         if post_params[:status] == 0 || post_params[:status] == 2
           @demande.update(post_params)
             render json: {
             demande:@demande,
             motif: @motif,
-            user: @user}
+            user: @user }
 
         elsif post_params[:status] == 1
       
@@ -58,7 +58,7 @@ class DemandesController < ApplicationController
           render json: {
             demande: @demande,
             motif: @motif,
-            user: @user}
+            user: @user }
         else
           render json: @demande.errors, statut: :unprocessable_entity
         end
@@ -126,7 +126,7 @@ end
     
       def post_params
         
-        params.permit(:start_date, :end_date, :commentaire, :employe_id, :motif_id, :status , :nbr_jours)
+        params.permit(:start_date, :end_date, :commentaire, :employe_id, :motif_id, :status , :nbr_jours, :id)
       end
     
       def set_post
