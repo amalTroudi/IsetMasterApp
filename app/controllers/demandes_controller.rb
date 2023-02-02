@@ -16,7 +16,7 @@ class DemandesController < ApplicationController
         end
 
 
-        
+
         if @demande.save
           render json: @demande
         
@@ -27,6 +27,22 @@ class DemandesController < ApplicationController
         
      
       end
+      def updateadminimage
+        @user = User.find(params[:id])
+    
+        if @user.update(paramsimagefreelancer)
+          render json: @user, methods: [:user_image_url]
+    
+        else
+          render json: @user.errors, statut: :unprocessable_entity
+        end
+      end
+
+
+      def paramsimagefreelancer
+        
+        params.permit(:id, :avatar)
+    end
 
     
       def show
@@ -35,19 +51,34 @@ class DemandesController < ApplicationController
         render json: @demande
       end
   
+
+     
+
+      def updatedemandebymotif
+        @demande = Demande.find(params[:id])
+    
+        if @demande.update(post_params)
+          render json: @demande
+    
+        else
+          render json: @demande.errors, statut: :unprocessable_entity
+        end
+      end
+
       def update
+        
         @demande = Demande.find(params[:id])
         @motif = Motif.where("id = ?" ,  @demande.motif_id ) 
         @user = User.where("id = ?" ,  @demande.employe_id ) 
-       
-        if post_params[:status] == "refuse" || post_params[:status] == "encours"
+        
+        if post_params[:status] == "refuse" || post_params[:status] == "encours" || post_params[:status] == 2 || post_params[:status] == 0
           @demande.update(post_params)
             render json: {
             demande:@demande,
             motif: @motif,
             user: @user }
 
-        elsif post_params[:status] == "accepter"
+        elsif post_params[:status] == "accepter" || post_params[:status] == 1
       
           demande_days = (@demande.nbr_jours).to_f
           balance_days = @user.pluck(:balance).join(',').to_f       
@@ -104,7 +135,7 @@ end
     @acepted=Demande.where(status: 1).where(employe_id:(params[:employe_id])).count()
     @encours= Demande.where(status: 0).where(employe_id:(params[:employe_id])).count()
     @refused= Demande.where(status: 2).where(employe_id:(params[:employe_id])).count()
- 
+        
    
     render json:{
      
