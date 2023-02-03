@@ -105,11 +105,13 @@ class DemandesController < ApplicationController
 
   
    render json:{
+    data:[
     all: @all,
     users: @users,
     acepted: @acepted,
     encours: @encours,
     refused: @refused
+    ]
   }
     end
     
