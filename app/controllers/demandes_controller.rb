@@ -71,14 +71,14 @@ class DemandesController < ApplicationController
         @motif = Motif.where("id = ?" ,  @demande.motif_id ) 
         @user = User.where("id = ?" ,  @demande.employe_id ) 
         
-        if post_params[:status] == "refuse" || post_params[:status] == "encours" || post_params[:status] == 2 || post_params[:status] == 0
+        if post_params[:status] == "refuse" || post_params[:status] == "inprogress" || post_params[:status] == 2 || post_params[:status] == 0
           @demande.update(post_params)
             render json: {
             demande:@demande,
             motif: @motif,
             user: @user }
 
-        elsif post_params[:status] == "accepter" || post_params[:status] == 1
+        elsif post_params[:status] == "accept" || post_params[:status] == 1
       
           demande_days = (@demande.nbr_jours).to_f
           balance_days = @user.pluck(:balance).join(',').to_f       
